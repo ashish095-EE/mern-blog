@@ -1,10 +1,13 @@
-function Footer() {
+
+import {Footer} from 'flowbite-react'
+function FooterCom() {
   return (
-    <div>
+    <Footer container className='border border-t-8 border-teal-500'>
         Footer
-      
-    </div>
+    </Footer>
+
+   
   )
 }
 
-export default Footer
+export default FooterCom
