@@ -3,6 +3,8 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import userRoutes from './routes/user.route.js';
 import authRoutes from './routes/auth.routes.js';
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
 dotenv.config();
 
 mongoose.connect(process.env.MONGO).then(() => {
@@ -15,7 +17,11 @@ mongoose.connect(process.env.MONGO).then(() => {
 
 
 const app = express();
+app.use(cors());
+
 app.use(express.json());
+
+app.use(cookieParser());
 
 app.use('/api/user', userRoutes);
 app.use('/api/auth', authRoutes);

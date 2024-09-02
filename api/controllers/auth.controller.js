@@ -50,9 +50,11 @@ export const signin = async(req,res,next) =>{
         )
 
         const {password: pass, ...rest} = validUser._doc;
-        res.status(200).cookie('acess token',token, {
+        res.status(200).cookie('access_token',token, {
+            
             httpOnly: true
         }).json(rest);
+        
 
     }
     catch(error){
@@ -69,7 +71,7 @@ export const google = async(req, res,next) => {
         if(user){
             const token = jwt.sign({_id:user._id},process.env.JWT_SECRET)
             const  {passord, ...rest} = user._doc
-            res.status(200).cookie('acess token', token, {
+            res.status(200).cookie('access_token', token, {
                 httpOnly: true
             }).json(rest);
         }
@@ -85,11 +87,11 @@ export const google = async(req, res,next) => {
             })
             await newUser.save();
 
-            const token = jwt.sign({_id:newUser._id},process.env.JWT_SECRET)
+            const token = jwt.sign({id:newUser._id},process.env.JWT_SECRET)
             const  {passord, ...rest} = newUser._doc
             res
             .status(200)
-            .cookie('acess token', token, {
+            .cookie('access_token', token, {
                 httpOnly: true
             })
             .json(rest);
