@@ -32,9 +32,10 @@ export const updateUser = async (req,res,next) =>{
         }
         if(!req.body.username.match(/^[a-zA-Z0-9]+$/)){
             return next(errorHandler(400, 'Username can only contain alphanumeric characters'));
-        }
+        };
 
     }
+
     try {
         const updateUser = await User.findByIdAndUpdate(
             req.params.userId,

@@ -64,15 +64,17 @@ export const signin = async(req,res,next) =>{
 
 export const google = async(req, res,next) => {
     const{email,name,googlePhotoUrl}=  req.body;
+    console.log("from request :",googlePhotoUrl);
 
-    const user = await User.findOne({email});
-
+    
     try {
+        const user = await User.findOne({email});
+
         if(user){
             const token = jwt.sign({_id:user._id},process.env.JWT_SECRET)
             const  {passord, ...rest} = user._doc
             res.status(200).cookie('access_token', token, {
-                httpOnly: true
+                httpOnly: true,
             }).json(rest);
         }
         else{
