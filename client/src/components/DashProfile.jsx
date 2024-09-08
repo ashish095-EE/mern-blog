@@ -1,16 +1,17 @@
-import { Alert, Button, TextInput } from 'flowbite-react';
+import { Alert, Button, Modal, ModalBody, ModalHeader, TextInput } from 'flowbite-react';
+import {HiOutlineExclamationCircle} from 'react-icons/hi'
 import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
 import { app } from '../firebase'; // Ensure that this import is correctly set up
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-import{updateFailure,updateStart,updateSuccess} from '../redux/user/userSlice';
+import{updateFailure,updateStart,updateSuccess,deleteUserFailure,deleteUserStart,deleteUserSuccess} from '../redux/user/userSlice';
 import { useDispatch } from 'react-redux';
 
 export default function DashProfile() {
   const dispatch = useDispatch();
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentUser,error } = useSelector((state) => state.user);
   const [imageFile, setImageFile] = useState(null);
   const [imageFileUrl, setImageFileUrl] = useState(null);
   const [imageFileUploadingProgress, setImageFileUploadingProgress] = useState(null);
@@ -19,6 +20,7 @@ export default function DashProfile() {
   const[imageFileUploading, setImageFileUploading] = useState(false);
   const[updateUserSuccess, setUpdateUserSuccess] = useState(null);
   const [userUpdateError, setUserUpdateError]= useState(null);
+  const[showModels, setShowModels] = useState(false);
   
 
   console.log(imageFileUploadingProgress,imageFileUploadError);
@@ -67,6 +69,7 @@ export default function DashProfile() {
               setImageFileUrl(downloadURL); // Set the final download URL after upload
               setFormData({...formData, profilePicture: downloadURL }); // Update form data with the uploaded image URL
               setImageFileUploading(false);
+              setImageFileUploadingProgress(null);
             });
           }
         );
@@ -84,7 +87,7 @@ export default function DashProfile() {
     
     e.preventDefault();
     setUpdateUserSuccess(null);
-    userUpdateError(null);
+    setUserUpdateError(null);
     if(Object.keys(formData).length===0){
       setUserUpdateError("Please Update at least one field");
       return;
@@ -121,6 +124,29 @@ export default function DashProfile() {
       
     }
   };
+
+  const deleteUserOnClick = async () =>{
+    setShowModels(false);
+    try {
+      dispatch(deleteUserStart());
+      const res = await fetch(`/api/user/delete/${currentUser._id}`, {
+        method: 'DELETE',
+      });
+      const data  = await res.json();
+      if(!res.ok){
+        dispatch(deleteUserFailure(data.message));
+      }
+      else{
+        dispatch(deleteUserSuccess(data));
+        
+      }
+      
+    } catch (error) {
+      dispatch(deleteUserFailure(error.message));
+      
+    }
+
+  }; 
   
   return (
     <div className='max-w-lg mx-auto p-3 w-full'>
@@ -190,7 +216,7 @@ export default function DashProfile() {
       </form>
 
       <div className='text-red-500 flex justify-between mt-5'>
-        <span className='cursor-pointer'>Delete Account</span>
+        <span className='cursor-pointer' onClick={()=> setShowModels(true)}>Delete Account</span>
         <span className='cursor-pointer'>Sign Out</span>
       </div>
 
@@ -200,12 +226,31 @@ export default function DashProfile() {
 
         </Alert>
       )}
-       {userUpdateError && (
+       {error && (
         <Alert color='failure' className='mt-5'>
-          {userUpdateError}
+          {error}
 
         </Alert>
       )}
+      <Modal show ={showModels}
+      onClose={()=> setShowModels(false)}
+      popup
+      size='md'>
+        <ModalHeader />
+        <ModalBody>
+          <div className="text-center">
+            <HiOutlineExclamationCircle className='h-14 w-14 mx-auto mb-5 text-gray-500' />
+            <h3 className='font-semibold mb-5 text-lg m-4 text-gray-500 dark:text-gray-500'>Are You sure you want to Delete The Account?</h3>
+            <div className="flex justify-center gap-8">
+              <Button color='failure' onClick={deleteUserOnClick}>Yes,I am Sure</Button>
+              <Button color='success' onClick={()=>setShowModels(false)}>No,Cancel</Button>
+            </div>
+
+          </div>
+        </ModalBody>
+
+      </Modal>
+      
 
 
       
