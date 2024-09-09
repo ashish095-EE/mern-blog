@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Alert, Button, Modal, ModalBody, ModalHeader, TextInput } from 'flowbite-react';
 import {HiOutlineExclamationCircle} from 'react-icons/hi'
 import { useEffect, useRef, useState } from 'react';
@@ -6,12 +7,12 @@ import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/
 import { app } from '../firebase'; // Ensure that this import is correctly set up
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-import{updateFailure,updateStart,updateSuccess,deleteUserFailure,deleteUserStart,deleteUserSuccess} from '../redux/user/userSlice';
+import{updateFailure,updateStart,updateSuccess,deleteUserFailure,deleteUserStart,deleteUserSuccess,signOutSuccess} from '../redux/user/userSlice';
 import { useDispatch } from 'react-redux';
 
 export default function DashProfile() {
   const dispatch = useDispatch();
-  const { currentUser,error } = useSelector((state) => state.user);
+  const { currentUser } = useSelector((state) => state.user);
   const [imageFile, setImageFile] = useState(null);
   const [imageFileUrl, setImageFileUrl] = useState(null);
   const [imageFileUploadingProgress, setImageFileUploadingProgress] = useState(null);
@@ -23,7 +24,7 @@ export default function DashProfile() {
   const[showModels, setShowModels] = useState(false);
   
 
-  console.log(imageFileUploadingProgress,imageFileUploadError);
+  
 
   const filePickerRef = useRef();
 
@@ -77,12 +78,13 @@ export default function DashProfile() {
   
       uploadImage();
     }
+  
   }, [imageFile]);
 
   const handleChange = (e) =>{
     setFormData({...formData, [e.target.id]: e.target.value});
   };
-  console.log(formData);
+  
   const handleSubmit = async (e) =>{
     
     e.preventDefault();
@@ -147,6 +149,27 @@ export default function DashProfile() {
     }
 
   }; 
+
+  const handelSignout = async () =>{
+    try {
+      const res = await fetch(`/api/user/signout`,{
+        method: 'POST',
+      })
+      const data = await res.json();
+
+      if(!res.ok){
+        console.log(data.message);
+      }
+      else{
+        dispatch(signOutSuccess());
+      }
+      
+    } catch (error) {
+      console.error(error);
+      
+    }
+    
+  }
   
   return (
     <div className='max-w-lg mx-auto p-3 w-full'>
@@ -217,7 +240,7 @@ export default function DashProfile() {
 
       <div className='text-red-500 flex justify-between mt-5'>
         <span className='cursor-pointer' onClick={()=> setShowModels(true)}>Delete Account</span>
-        <span className='cursor-pointer'>Sign Out</span>
+        <span className='cursor-pointer' onClick={handelSignout}>Sign Out</span>
       </div>
 
       {updateUserSuccess && (
@@ -226,9 +249,9 @@ export default function DashProfile() {
 
         </Alert>
       )}
-       {error && (
+       {userUpdateError && (
         <Alert color='failure' className='mt-5'>
-          {error}
+          {userUpdateError}
 
         </Alert>
       )}
