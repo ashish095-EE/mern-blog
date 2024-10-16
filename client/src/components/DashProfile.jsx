@@ -9,6 +9,7 @@ import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import{updateFailure,updateStart,updateSuccess,deleteUserFailure,deleteUserStart,deleteUserSuccess,signOutSuccess} from '../redux/user/userSlice';
 import { useDispatch } from 'react-redux';
+import { Link } from "react-router-dom";
 
 export default function DashProfile() {
   const dispatch = useDispatch();
@@ -236,6 +237,20 @@ export default function DashProfile() {
         <Button type='submit' gradientDuoTone='purpleToBlue' outline>
           Update
         </Button>
+
+        {currentUser.isAdmin && (
+            <Link to={'/create-post'}>
+              <Button
+              type='button'
+              gradientDuoTone='purpleToPink'
+              className='w-full mt-3'>
+                Create A Post
+
+              </Button>
+            
+            </Link>
+          )
+        }
       </form>
 
       <div className='text-red-500 flex justify-between mt-5'>
