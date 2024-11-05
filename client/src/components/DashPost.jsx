@@ -53,6 +53,7 @@ const DashPost = () => {
       }
       
     } catch (error) {
+      console.log(error.message);
       
     }
 
@@ -111,14 +112,14 @@ const DashPost = () => {
         </Table>
 
         {showMore && (
-          <button  on onClick={handelShowMore}className="w-full text-teal-500 self-center text-sm py-7">
+          <button   onClick={handelShowMore}className="w-full text-teal-500 self-center text-sm py-7">
             Show More
           </button>
         )}
       
       </>
     ):(
-      <h1>You have no post yet</h1>
+      <h1>You got No post Yet</h1>
     )}
       
       
