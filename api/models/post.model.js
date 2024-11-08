@@ -25,6 +25,10 @@ const postSchema = new mongoose.Schema(
         category:{
             type: String,
             default:"Uncategorized",
+        },
+        content:{
+            type:String,
+            default: "Write your blog post here",
         }
 
     },
