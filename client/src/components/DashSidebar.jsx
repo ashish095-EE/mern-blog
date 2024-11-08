@@ -6,6 +6,7 @@ import { signOutSuccess } from "../redux/user/userSlice";
 import { useDispatch } from "react-redux";
 import { MdPostAdd } from "react-icons/md";
 import { useSelector } from "react-redux";
+import { FiUsers } from "react-icons/fi";
 
 export default function DashSidebar() {
 
@@ -80,6 +81,23 @@ export default function DashSidebar() {
                   as={"div"}
                   >
                       Posts
+
+                  </Sidebar.Item>
+
+              </Link>
+                )}
+                {currentUser.isAdmin && (
+                  <Link to='/dashboard?tab=users'>
+
+                  <Sidebar.Item
+                   
+                  active = {tab==='users'} 
+                  icon={FiUsers} 
+                   
+                  labelColor='dark'
+                  as={"div"}
+                  >
+                      Users
 
                   </Sidebar.Item>
 
