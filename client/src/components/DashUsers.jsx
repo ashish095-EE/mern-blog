@@ -64,6 +64,21 @@ const DashUsers = () => {
   }
 
   const deleteUserOnClick  = async () => {
+    try {
+      const res = await fetch(`/api/user/delete/${userIdToDelete}`, {
+        method: 'DELETE',
+      });
+      const data = await res.json();
+      if(res.ok){
+        setUsers((prev) =>prev.filter((user) => user._id!==userIdToDelete))
+        setShowMore(false);
+        setShowModels(false);
+      }
+      
+    } catch (error) {
+      console.log(error.message);
+      
+    }
 
   }
   return (
@@ -123,7 +138,7 @@ const DashUsers = () => {
       
       </>
     ):(
-      <h1>You got No post Yet</h1>
+      <h1>You got No Users Yet</h1>
     )}
 
       <Modal show ={showModels}
@@ -134,7 +149,7 @@ const DashUsers = () => {
         <ModalBody>
           <div className="text-center">
             <HiOutlineExclamationCircle className='h-14 w-14 mx-auto mb-5 text-gray-500' />
-            <h3 className='font-semibold mb-5 text-lg m-4 text-gray-500 dark:text-gray-500'>Are You sure you want to Delete This Post?</h3>
+            <h3 className='font-semibold mb-5 text-lg m-4 text-gray-500 dark:text-gray-500'>Are You sure you want to Delete This User?</h3>
             <div className="flex justify-center gap-8">
               <Button color='failure' onClick={deleteUserOnClick}>Yes,I am Sure</Button>
               <Button color='success' onClick={()=>setShowModels(false)}>No,Cancel</Button>
