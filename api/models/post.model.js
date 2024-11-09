@@ -28,7 +28,7 @@ const postSchema = new mongoose.Schema(
         },
         content:{
             type:String,
-            default: "Write your blog post here",
+            required: true,
         }
 
     },

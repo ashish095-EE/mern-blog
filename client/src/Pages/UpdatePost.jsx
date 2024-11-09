@@ -34,8 +34,20 @@ function UpdatePost() {
                 }
                 
                 if(res.ok){
+                    console.log('Fetched post data:', data.posts[0]);
                     setPublishError(null);
-                    setFormData(data.posts[0]);
+                    console.log('Setting form data:', data.posts[0]);
+                    
+                    // setFormData({
+                    //     _id: data.posts[0]._id || '', // Default to empty string if missing
+                    //     title: data.posts[0].title || '',
+                    //     category: data.posts[0].category || '',
+                    //     content: data.posts[0].content || '',
+                    //     image: data.posts[0].image || ''
+                    // });
+                    setFormData(data.posts[0])
+                    
+                    
                 }
             }
                 
@@ -101,6 +113,7 @@ function UpdatePost() {
     const handelSubmit = async (e) =>{
         e.preventDefault();
         setPublishError(null);
+        
         try {
             const res = await fetch(`/api/post/updatepost/${formData._id}/${currentUser._id}`, {
                 method: 'PUT',
