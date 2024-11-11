@@ -1,0 +1,10 @@
+syms z n;
+T=(3*z^(-1)+2*z^(-2)/(1-0.5*z^(-1)+0.25*z^(-2)));
+H=iztrans(T);
+h=simplify(H);
+m=0:20;
+i=subs(h,n,m);
+stem(m,i);
+xlabel('n');
+ylabel('amplitude');
+title('impulse response');
