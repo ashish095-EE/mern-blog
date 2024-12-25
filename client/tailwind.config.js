@@ -20,5 +20,7 @@ export default {
     
     // Add Tailwind scrollbar plugin (no method call needed)
     scrollbar,
+
+    
   ],
 }
