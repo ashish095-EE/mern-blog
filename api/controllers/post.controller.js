@@ -1,15 +1,11 @@
 import Post from "../models/post.model.js";
 import { errorHandler } from "../utils/error.js";
 export const create = async(req, res, next) => {
-    console.log(req.user);
+    
 
-    if(!req.user.isAdmin){   //req from the user using req.user not req.body 
-        return next(403,"You are not a Admin");
-
-    }
-    if(!req.body.title||!req.body.content){
-        return next(400,"Title and content are required");
-    }
+    // if(!req.body.title||!req.body.content){
+    //     return next(400,"Title and content are required");
+    // }
 
     const slug = req.body.title.split(' ').join('-').toLowerCase().replace(/[^a-zA-Z0-9-]/g, '-');
     console.log(req.body);
