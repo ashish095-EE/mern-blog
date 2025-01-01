@@ -80,6 +80,10 @@ export default function Header() {
             <AiOutlineSearch />
         </Button>
 
+        
+
+        
+
         <div className="flex gap-2 md:order-2">
             <Button className="w-12 h-10 lg: border " color='grey' pill onClick={() => dispatch(toggleTheme())}>
                 {theme==='light' ? <FaSun/> : <FaMoon />}
@@ -87,41 +91,49 @@ export default function Header() {
 
             </Button>
 
-            {currentUser ? (
-                <Dropdown arrowIcon={false} inline 
-                label = {
-                    <Avatar 
-                    alt="user"
-                    img={currentUser.profilePicture}
-                    rounded
-                    
-                    />
-                }>
-                    <Dropdown.Header>
-                        <span className="block text-sm">@{currentUser.username}</span>
-                        <span className="block text-sm font-medium   truncate">{currentUser.email}</span>
+            {currentUser ? ( <>
+            
+                <Link to={'/create-post'}>
+                    <Button gradientDuoTone="purpleToBlue" outline>Create Post</Button>
+                </Link>
+              
+              <Dropdown arrowIcon={false} inline
+                  label={<Avatar
+                      alt="user"
+                      img={currentUser.profilePicture}
+                      rounded />}>
+                      <Dropdown.Header>
+                          <span className="block text-sm">@{currentUser.username}</span>
+                          <span className="block text-sm font-medium   truncate">{currentUser.email}</span>
 
-                        <Link to ={'/dashboard?tab=profile'}>
-                            <Dropdown.Item>Profile</Dropdown.Item>
-                        </Link>
-                        <Dropdown.Divider />
-                        <Dropdown.Item onClick={handelSignout}>Signout </Dropdown.Item>
-                    </Dropdown.Header>
-                    
-                    
-                </Dropdown>
+                          <Link to={'/dashboard?tab=profile'}>
+                              <Dropdown.Item>Profile</Dropdown.Item>
+                          </Link>
+                          <Dropdown.Divider />
+                          <Dropdown.Item onClick={handelSignout}>Signout </Dropdown.Item>
+                      </Dropdown.Header>
+
+
+                  </Dropdown></>
+
+                   
+
+
 
             ): 
             (
                 <Link to="/signin">
                     <Button gradientDuoTone="purpleToBlue" outline>Sign-In</Button>
                 </Link>
+
                 
             )}
 
             
 
             <Navbar.Toggle />
+
+            
 
         </div>
         <Navbar.Collapse>
