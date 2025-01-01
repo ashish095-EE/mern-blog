@@ -9,6 +9,8 @@ import commentRoutes from './routes/comment.route.js';
 
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
+import path from 'path';
+
 dotenv.config();
 
 mongoose.connect(process.env.MONGO).then(() => {
@@ -17,6 +19,8 @@ mongoose.connect(process.env.MONGO).then(() => {
     console.error(err);
     
 });
+
+const __dirname = path.resolve();
 
 
 

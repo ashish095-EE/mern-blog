@@ -1,10 +1,11 @@
 import { Avatar, Button, Dropdown, Navbar, TextInput } from "flowbite-react";
-import { Link ,useLocation } from "react-router-dom";
+import { Link ,useLocation,useNavigate } from "react-router-dom";
 import {AiOutlineSearch} from "react-icons/ai"
 import {FaMoon,FaSun} from "react-icons/fa"
 import { useSelector, useDispatch} from 'react-redux'
 import {toggleTheme} from '../redux/theme/themeSlice';
 import { signOutSuccess } from "../redux/user/userSlice";
+import { useEffect, useState } from "react";
 
 
 
@@ -12,9 +13,21 @@ import { signOutSuccess } from "../redux/user/userSlice";
 
 export default function Header() {
     const path = useLocation().pathname;
+    const navigate = useNavigate();
+    const location = useLocation();
     const dispatch = useDispatch();
+    const[searchTerm,setSearchTerm] = useState('')
     const {currentUser} = useSelector(state=> state.user);
     const {theme} = useSelector(state=> state.theme);
+
+
+    useEffect(() => {
+        const urlParams = new URLSearchParams(location.search);
+        const serachTermFromUrl = urlParams.get('serachTerm'); 
+        console.log(searchTerm);
+
+
+    }, [location.search])
 
     const handelSignout = async () =>{
         try {
@@ -36,6 +49,14 @@ export default function Header() {
         }
         
     }
+    const handelSubmit  = async (e) => {
+        e.preventDefault();
+        const urlParams = new URLSearchParams(location.search);
+        urlParams.set('serachTerm', searchTerm);
+        const searchQuery = urlParams.toString();
+        navigate(`search?${searchQuery}`);
+        
+    }
   return (
     <Navbar className="border-b-2">
         <Link to="/" className="self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white">
@@ -44,12 +65,14 @@ export default function Header() {
 
         </Link>
 
-        <form action="#">
+        <form action="#" onSubmit={handelSubmit}>
             <TextInput
             type="text"
             placeholder="search"
             rightIcon={AiOutlineSearch}
             className="hidden lg:inline"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
              />
         </form>
 
